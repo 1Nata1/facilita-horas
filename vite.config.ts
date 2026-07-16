@@ -7,22 +7,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [react()],
+  base: '/facilita-horas/',
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "src"),
-      "@shared": path.resolve(__dirname, "shared"),
-      "@assets": path.resolve(__dirname, "attached_assets"),
+      "@": path.resolve(__dirname, "./src"),
+      "@shared": path.resolve(__dirname, "./shared"),
     },
   },
-  build: {
-    outDir: "dist",
-  },
-  preview: {
-    allowedHosts: true,
-    host: true,
-  },
   server: {
-    allowedHosts: true,
-    host: true,
+    host: '0.0.0.0',
+    port: 5173,
+  },
+  build: {
+    outDir: 'dist',
   },
 });
