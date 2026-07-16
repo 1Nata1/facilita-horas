@@ -5,12 +5,12 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Usa base path relativo apenas no build para GitHub Pages
-const isProduction = process.env.NODE_ENV === "production";
+// Se a variável GH_PAGES estiver definida, usa base path para GitHub Pages
+const base = process.env.GH_PAGES ? "/facilita-horas/" : "/";
 
 export default defineConfig({
   plugins: [react()],
-  base: isProduction ? "./" : "/",
+  base,
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
