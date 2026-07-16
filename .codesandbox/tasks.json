@@ -1,0 +1,44 @@
+{
+  "setupTasks": [
+    {
+      "name": "Installing Dependencies",
+      "command": "yarn install"
+    }
+  ],
+
+  "tasks": {
+    "dev": {
+      "name": "dev",
+      "command": "yarn dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
+    },
+    "build": {
+      "name": "build",
+      "command": "yarn build",
+      "runAtStart": false
+    },
+    "preview": {
+      "name": "preview",
+      "command": "yarn preview",
+      "runAtStart": false
+    },
+    "check": {
+      "name": "check",
+      "command": "yarn check",
+      "runAtStart": false
+    },
+    "db:push": {
+      "name": "db:push",
+      "command": "yarn db:push",
+      "runAtStart": false
+    },
+    "kill-ports": {
+      "name": "kill-ports",
+      "command": "yarn kill-ports",
+      "runAtStart": false
+    }
+  }
+}

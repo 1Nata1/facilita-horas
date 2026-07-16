@@ -1,0 +1,146 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+import { COURSES } from "@/mocks/academicOptions";
+
+import { ArrowLeft, Save } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { Input } from "@/components/ui/input";
+
+import { useLocation } from "wouter";
+import { useEffect, useState } from "react";
+
+export default function ProfileSettings() {
+  const [, setLocation] = useLocation();
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [course, setCourse] = useState("");
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("facilita-user");
+
+    if (savedUser) {
+      const userData = JSON.parse(savedUser);
+
+      setUser(userData);
+
+      setUsername(userData.username || "");
+      setEmail(userData.email || "");
+      setPhone(userData.phone || "");
+      setCourse(userData.course || "");
+    }
+  }, []);
+
+  const handleSave = () => {
+    const savedUser = localStorage.getItem("facilita-user");
+
+    if (!savedUser) return;
+
+    const user = JSON.parse(savedUser);
+
+    const updatedUser = {
+      ...user,
+      username,
+      email,
+      phone,
+      course: user.role === "student" ? course : "",
+      institution: "UTFPR",
+    };
+
+    localStorage.setItem("facilita-user", JSON.stringify(updatedUser));
+
+    alert("Perfil atualizado com sucesso!");
+
+    setLocation("/profile");
+  };
+
+  return (
+    <main className="px-4 py-6 max-w-5xl mx-auto space-y-6">
+      <div className="flex items-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setLocation("/profile")}
+        >
+          <ArrowLeft size={20} />
+        </Button>
+
+        <h1 className="text-2xl font-bold ml-2">Configurações</h1>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Dados do perfil</CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-4">
+          <div>
+            <label className="text-sm font-medium">Nome</label>
+
+            <Input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Digite seu nome"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Email</label>
+
+            <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Digite seu email"
+            />
+          </div>
+
+          <div>
+            <label className="text-sm font-medium">Telefone</label>
+
+            <Input
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Digite seu telefone"
+            />
+          </div>
+
+          {user?.role === "student" && (
+            <div>
+              <label className="text-sm font-medium">Curso</label>
+
+              <Select value={course} onValueChange={setCourse}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione seu curso" />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {COURSES.map((courseOption) => (
+                    <SelectItem key={courseOption} value={courseOption}>
+                      {courseOption}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          <Button className="w-full" onClick={handleSave}>
+            <Save size={16} className="mr-2" />
+            Salvar Alterações
+          </Button>
+        </CardContent>
+      </Card>
+    </main>
+  );
+}
